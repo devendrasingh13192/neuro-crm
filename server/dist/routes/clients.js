@@ -1,0 +1,10 @@
+import express from 'express';
+const router = express.Router();
+import { ClientController } from '../controllers/clientController.js';
+import { authMiddleware } from '../middlewares/auth.js';
+router.use(authMiddleware);
+router.get('/', (req, res) => ClientController.getClients(req, res));
+router.post('/', (req, res) => ClientController.createClient(req, res));
+router.patch('/:id/neuro-profile', (req, res) => ClientController.updateClient(req, res));
+router.get('/:id/recommendations', (req, res) => ClientController.getRecommendations(req, res));
+export { router as clientRouter };

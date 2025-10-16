@@ -1,0 +1,76 @@
+<div class="login-container">
+      <mat-card class="login-card">
+        <mat-card-header>
+          <mat-card-title>
+            <span class="neuro-icon">🧠</span> Welcome to NeuroCRM
+          </mat-card-title>
+          <mat-card-subtitle style="justify-content: center;margin-left: 90px;" >{{isLoginMode() ? 'Sign in to your account' : 'Sign up to create account'}}</mat-card-subtitle>
+        </mat-card-header>
+        @if (errorMessage()) {
+              <div class="error-message">
+                {{ errorMessage() }}
+              </div>
+            }
+
+        <mat-card-content>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+            <mat-form-field  appearance="outline" class="full-width">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" type="email" placeholder="your@email.com">
+              @if (loginForm.get('email')?.hasError('required')) {
+                <mat-error>Email is required</mat-error>
+              }
+              @if (loginForm.get('email')?.hasError('email')) {
+                <mat-error>Please enter a valid email</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="password" type="password">
+              @if (loginForm.get('password')?.hasError('required')) {
+                <mat-error>Password is required</mat-error>
+              }
+              @if (loginForm.get('password')?.hasError('minlength')) {
+                <mat-error>Password at least of 8 characters</mat-error>
+              }
+            </mat-form-field>
+
+            @if(!isLoginMode()){
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Confirm Password</mat-label>
+                  <input matInput formControlName="confirmPassword" type="password">
+                  @if (loginForm.get('confirmPassword')?.hasError('required')) {
+                    <mat-error>Confirm Password is required</mat-error>
+                  }
+                  @if (!passwordsMatch) {
+                    <mat-error>Passwords do not match</mat-error>
+                  }
+                </mat-form-field>
+            }
+
+
+            <button 
+              mat-raised-button 
+              color="primary" 
+              type="submit" 
+              class="full-width login-button"
+              [disabled]="!isFormValid  || isLoading()">
+              
+              @if (isLoading()) {
+                <mat-spinner diameter="20" class="spinner"></mat-spinner>
+                Signing in...
+              } @else if(isLoginMode()) {
+                Sign In
+              } @else{
+                Sign Up
+              }
+            </button>
+          </form>
+        </mat-card-content>
+
+        <mat-card-actions class="card-actions">
+          <p>{{isLoginMode() ? "Don't have an account" : "Already have an account"}}?<a (click)="isLogInMode()" class="link">&nbsp;{{isLoginMode() ? 'signup' : 'login'}}</a></p>
+        </mat-card-actions>
+      </mat-card>
+    </div>
