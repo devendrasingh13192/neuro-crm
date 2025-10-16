@@ -8,12 +8,12 @@ export interface AuthRequest extends Request {
 }
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
-    const header = req.header('Authorization')?.replace('Bearer ', '');
-    if (!header) {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) {
         return res.status(401).json({ message: 'No token, authorization denied'});
     }
     try{
-        const decoded = jwt.verify(header, JWT_SECRET) as { userId: string };
+        const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
         req.userId = decoded.userId;
         next();
     }catch (error: any) {

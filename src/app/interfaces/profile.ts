@@ -3,6 +3,7 @@ export interface UserProfile{
     name? : string;
     email : string;
     password : string;
+    role : string;
     communicationStyle : {
         primary : 'direct' | 'diplomatic' | 'detailed' | 'big_picture';
         preferredChannels: ('email' | 'phone' | 'text' | 'video' | 'in-person')[];
@@ -18,7 +19,7 @@ export interface UserProfile{
 }
 
 export interface UpdateProfileRequest {
-  name : string;
+  name? : string;
   communicationStyle: {
     primary: 'direct' | 'diplomatic' | 'detailed' | 'big_picture';
     preferredChannels: ('email' | 'phone' | 'text' | 'video' | 'in-person')[];
