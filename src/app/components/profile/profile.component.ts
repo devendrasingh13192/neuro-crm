@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProfileService } from '../../services/profile.service';
 import { UpdateProfileRequest } from '../../interfaces/profile';
@@ -15,10 +15,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatChipsModule } from '@angular/material/chips';
 
+
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
@@ -38,6 +40,7 @@ import { MatChipsModule } from '@angular/material/chips';
 export class ProfileComponent {
   private snackBar = inject(MatSnackBar);
   profileService = inject(ProfileService);
+  breakFrequencyValue = signal(45);
 
   profileForm!: FormGroup;
   isSaving = signal(false);
@@ -53,7 +56,12 @@ export class ProfileComponent {
   ngOnInit(): void {
     this.initForm();
     this.loadProfile();
+    
   }
+
+  // ngAfterViewInit() : void{
+  //   this.loadProfile();
+  // }
 
   private initForm(): void {
     this.profileForm = new FormGroup({
@@ -70,9 +78,6 @@ export class ProfileComponent {
     });
   }
 
-  get breakFrequencyControl(): FormControl {
-    return this.profileForm.get('breakFrequency') as FormControl;
-  }
 
   private loadProfile(): void {
     this.profileService.getProfile().subscribe({
@@ -85,7 +90,10 @@ export class ProfileComponent {
     });
   }
 
+ 
+
   private populateForm(profile: any): void {
+    
     this.profileForm.patchValue({
       name: profile.name || '',
       role: profile.role || 'sales',
@@ -97,6 +105,8 @@ export class ProfileComponent {
       backgroundNoise: profile.communicationStyle?.sensoryPreferences?.backgroundNoise ?? false,
       breakFrequency: profile.communicationStyle?.sensoryPreferences?.breakFrequency || 45
     });
+
+
 
     // Set preferred channels
     const channelsArray = this.profileForm.get('preferredChannels') as FormArray;
@@ -156,6 +166,7 @@ export class ProfileComponent {
         },
         error: (error) => {
           this.snackBar.open('Failed to update profile', 'Close', { duration: 3000 });
+          this.profileService.isLoading.set(false);
         }
       });
     }

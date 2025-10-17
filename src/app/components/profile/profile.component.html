@@ -1,213 +1,207 @@
 <div class="profile-container">
-      <div class="profile-header">
-        <h1>My Profile</h1>
-        <p>Customize your personal information and communication preferences</p>
-      </div>
+  <div class="profile-header">
+    <h1>My Profile</h1>
+    <p>Customize your personal information and communication preferences</p>
+  </div>
 
-      <!-- Loading State -->
-      @if (profileService.isLoading()) {
-        <div class="loading-spinner">
-          <mat-spinner diameter="50"></mat-spinner>
-        </div>
-      }
-
-      @if (profileService.profile$(); as profile) {
-        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
-          
-          <!-- Personal Information Card -->
-          <mat-card class="profile-card">
-            <mat-card-header>
-              <mat-card-title>Personal Information</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="form-row">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Name</mat-label>
-                  <input matInput formControlName="name" placeholder="Enter your full name">
-                  @if (profileForm.get('name')?.hasError('required')) {
-                    <mat-error>Name is required</mat-error>
-                  }
-                </mat-form-field>
-                
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Email</mat-label>
-                  <input matInput [value]="profile.email" disabled>
-                  <mat-hint>Email cannot be changed</mat-hint>
-                </mat-form-field>
-              </div>
-              
-              <div class="form-row">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Role</mat-label>
-                  <mat-select formControlName="role">
-                    <mat-option value="sales">Sales</mat-option>
-                    <mat-option value="manager">Manager</mat-option>
-                    <mat-option value="admin">Admin</mat-option>
-                  </mat-select>
-                  @if (profileForm.get('role')?.hasError('required')) {
-                    <mat-error>Role is required</mat-error>
-                  }
-                </mat-form-field>
-                
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Member Since</mat-label>
-                  <input matInput [value]="(profile.createdAt | date:'longDate') || 'N/A'" disabled>
-                </mat-form-field>
-              </div>
-            </mat-card-content>
-          </mat-card>
-
-          <!-- Communication Style Card -->
-          <mat-card class="profile-card">
-            <mat-card-header>
-              <mat-card-title>Communication Style</mat-card-title>
-              <mat-card-subtitle>How you prefer to communicate</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="form-row">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Primary Communication Style</mat-label>
-                  <mat-select formControlName="primary">
-                    <mat-option value="direct">Direct - Straight to the point</mat-option>
-                    <mat-option value="diplomatic">Diplomatic - Tactful and considerate</mat-option>
-                    <mat-option value="detailed">Detailed - Thorough and comprehensive</mat-option>
-                    <mat-option value="big_picture">Big Picture - Focus on overall goals</mat-option>
-                  </mat-select>
-                  @if (profileForm.get('primary')?.hasError('required')) {
-                    <mat-error>Communication style is required</mat-error>
-                  }
-                </mat-form-field>
-              </div>
-
-              <div class="form-section">
-                <h3>Preferred Communication Channels</h3>
-                <div class="chips-container">
-                  @for (channel of communicationChannels; track channel.value) {
-                    <mat-chip 
-                      [class.selected]="isChannelSelected(channel.value)"
-                      (click)="toggleChannel(channel.value)"
-                      class="communication-chip">
-                      {{ channel.label }}
-                    </mat-chip>
-                  }
-                </div>
-                @if (preferredChannelsArray.length === 0) {
-                  <p class="chips-hint">Select at least one communication channel</p>
-                }
-              </div>
-            </mat-card-content>
-          </mat-card>
-
-          <!-- Working Hours Card -->
-          <mat-card class="profile-card">
-            <mat-card-header>
-              <mat-card-title>Working Hours</mat-card-title>
-              <mat-card-subtitle>Your preferred working schedule</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="form-row">
-                <mat-form-field appearance="outline" class="half-width">
-                  <mat-label>Start Time</mat-label>
-                  <input matInput type="time" formControlName="startTime">
-                  @if (profileForm.get('startTime')?.hasError('required')) {
-                    <mat-error>Start time is required</mat-error>
-                  }
-                </mat-form-field>
-                
-                <mat-form-field appearance="outline" class="half-width">
-                  <mat-label>End Time</mat-label>
-                  <input matInput type="time" formControlName="endTime">
-                  @if (profileForm.get('endTime')?.hasError('required')) {
-                    <mat-error>End time is required</mat-error>
-                  }
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="half-width">
-                  <mat-label>Timezone</mat-label>
-                  <input matInput type="text" formControlName="timeZone">
-                  @if (profileForm.get('timeZone')?.hasError('required')) {
-                    <mat-error>Timezone is required</mat-error>
-                  }
-                </mat-form-field>
-              </div>
-            </mat-card-content>
-          </mat-card>
-
-          <!-- Sensory Preferences Card -->
-          <mat-card class="profile-card">
-            <mat-card-header>
-              <mat-card-title>Sensory Preferences</mat-card-title>
-              <mat-card-subtitle>Your comfort and focus preferences</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="toggle-row">
-                <mat-slide-toggle 
-                  formControlName="videoCalls"
-                  color="primary">
-                  Prefer Video Calls
-                </mat-slide-toggle>
-                <span class="toggle-description">Enable camera during meetings</span>
-              </div>
-
-              <div class="toggle-row">
-                <mat-slide-toggle 
-                  formControlName="backgroundNoise"
-                  color="primary">
-                  Comfortable with Background Noise
-                </mat-slide-toggle>
-                <span class="toggle-description">Okay with ambient sounds during calls</span>
-              </div>
-
-              <div class="slider-section">
-                <h3>Preferred Break Frequency</h3>
-                <mat-slider
-                  [formControl]="breakFrequencyControl"
-                  min="15"
-                  max="120"
-                  step="15"
-                  thumbLabel
-                  tickInterval="15">
-                </mat-slider>
-                <div class="slider-value">
-                  Every {{ breakFrequencyControl.value }} minutes
-                </div>
-                @if (breakFrequencyControl.hasError('min')) {
-                  <mat-error>Break frequency must be at least 15 minutes</mat-error>
-                }
-                @if (breakFrequencyControl.hasError('max')) {
-                  <mat-error>Break frequency cannot exceed 120 minutes</mat-error>
-                }
-              </div>
-            </mat-card-content>
-          </mat-card>
-
-          <!-- Action Buttons -->
-          <div class="action-buttons">
-            <button 
-              mat-stroked-button 
-              type="button" 
-              (click)="resetForm()"
-              [disabled]="profileService.isLoading()">
-              Reset Changes
-            </button>
-            
-            <button 
-              mat-raised-button 
-              color="primary" 
-              type="submit"
-              [disabled]="!profileForm.valid || profileService.isLoading() || !profileForm.dirty">
-              @if (profileService.isLoading()) {
-                <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
-                Saving...
-              } @else {
-                Save Changes
-              }
-            </button>
-          </div>
-        </form>
-      }@else {
+  <!-- Loading State -->
+  @if (profileService.isLoading()) {
   <div class="loading-spinner">
     <mat-spinner diameter="50"></mat-spinner>
   </div>
-}
+  }
+
+  @if (profileService.profile$(); as profile) {
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
+
+    <!-- Personal Information Card -->
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <mat-card-title>Personal Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" name="name" placeholder="Enter your full name">
+            @if (profileForm.get('name')?.hasError('required')) {
+            <mat-error>Name is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput [value]="profile.email" disabled name="email">
+            <mat-hint>Email cannot be changed</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="role" name="role">
+              <mat-option value="sales">Sales</mat-option>
+              <mat-option value="manager">Manager</mat-option>
+              <mat-option value="admin">Admin</mat-option>
+            </mat-select>
+            @if (profileForm.get('role')?.hasError('required')) {
+            <mat-error>Role is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Member Since</mat-label>
+            <input matInput [value]="(profile.createdAt | date:'longDate') || 'N/A'" disabled name="memberSince">
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Communication Style Card -->
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <mat-card-title>Communication Style</mat-card-title>
+        <mat-card-subtitle>How you prefer to communicate</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Primary Communication Style</mat-label>
+            <mat-select formControlName="primary" name="primary">
+              <mat-option value="direct">Direct - Straight to the point</mat-option>
+              <mat-option value="diplomatic">Diplomatic - Tactful and considerate</mat-option>
+              <mat-option value="detailed">Detailed - Thorough and comprehensive</mat-option>
+              <mat-option value="big_picture">Big Picture - Focus on overall goals</mat-option>
+            </mat-select>
+            @if (profileForm.get('primary')?.hasError('required')) {
+            <mat-error>Communication style is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="form-section">
+          <h3>Preferred Communication Channels</h3>
+          <div class="chips-container">
+            @for (channel of communicationChannels; track channel.value) {
+            <mat-chip [class.selected]="isChannelSelected(channel.value)" (click)="toggleChannel(channel.value)"
+              class="communication-chip">
+              {{ channel.label }}
+            </mat-chip>
+            }
+          </div>
+          @if (preferredChannelsArray.length === 0) {
+          <p class="chips-hint">Select at least one communication channel</p>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Working Hours Card -->
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <mat-card-title>Working Hours</mat-card-title>
+        <mat-card-subtitle>Your preferred working schedule</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Start Time</mat-label>
+            <input matInput type="time" formControlName="startTime" name="startTime">
+            @if (profileForm.get('startTime')?.hasError('required')) {
+            <mat-error>Start time is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>End Time</mat-label>
+            <input matInput type="time" formControlName="endTime" name="endTime">
+            @if (profileForm.get('endTime')?.hasError('required')) {
+            <mat-error>End time is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Timezone</mat-label>
+            <mat-select formControlName="timeZone" name="timeZone">
+              <mat-option value="europe">London (GMT+0)</mat-option>
+              <mat-option value="america">New York (EST)</mat-option>
+              <mat-option value="asia">Kolkata (IST)</mat-option>
+              <mat-option value="australia">Sydney (AEST)</mat-option>
+            </mat-select>
+             @if (profileForm.get('timeZone')?.hasError('required')) {
+            <mat-error>Role is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Sensory Preferences Card -->
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <mat-card-title>Sensory Preferences</mat-card-title>
+        <mat-card-subtitle>Your comfort and focus preferences</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="toggle-row">
+          <mat-slide-toggle formControlName="videoCalls" name="videoCalls" color="primary">
+            Prefer Video Calls
+          </mat-slide-toggle>
+          <span class="toggle-description">Enable camera during meetings</span>
+        </div>
+
+        <div class="toggle-row">
+          <mat-slide-toggle formControlName="backgroundNoise" name="backgroundNoise" color="primary">
+            Comfortable with Background Noise
+          </mat-slide-toggle>
+          <span class="toggle-description">Okay with ambient sounds during calls</span>
+        </div>
+
+        <div class="slider-section">
+          <h3>Preferred Break Frequency</h3>
+          <mat-form-field appearance="outline" class="break-frequency-field">
+        <mat-label>Break Frequency (minutes)</mat-label>
+        <input 
+          matInput 
+          type="number" 
+          formControlName="breakFrequency"
+          name="breakFrequency"
+          min="15"
+          max="120"
+          step="15"
+          placeholder="Enter break frequency in minutes">
+        <span matTextSuffix>minutes</span>
+        @if (profileForm.get('breakFrequency')?.hasError('required')) {
+          <mat-error>Break frequency is required</mat-error>
+        }
+        @if (profileForm.get('breakFrequency')?.hasError('min')) {
+          <mat-error>Break frequency must be at least 15 minutes</mat-error>
+        }
+        @if (profileForm.get('breakFrequency')?.hasError('max')) {
+          <mat-error>Break frequency cannot exceed 120 minutes</mat-error>
+        }
+      </mat-form-field>
+      <p class="input-hint">How often you prefer to take breaks during long sessions</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button mat-stroked-button type="button" (click)="resetForm()" [disabled]="profileService.isLoading()">
+        Reset Changes
+      </button>
+
+      <button mat-raised-button color="primary" type="submit"
+        [disabled]="!profileForm.valid || profileService.isLoading() || !profileForm.dirty">
+        @if (profileService.isLoading()) {
+        <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+        Saving...
+        } @else {
+        Save Changes
+        }
+      </button>
     </div>
+  </form>
+  }
+</div>

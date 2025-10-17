@@ -20,6 +20,7 @@ export interface UserProfile{
 
 export interface UpdateProfileRequest {
   name? : string;
+  role? : string;
   communicationStyle: {
     primary: 'direct' | 'diplomatic' | 'detailed' | 'big_picture';
     preferredChannels: ('email' | 'phone' | 'text' | 'video' | 'in-person')[];
@@ -28,7 +29,7 @@ export interface UpdateProfileRequest {
       end: string;
       timezone: string;
     };
-    sensoryPreferences: {
+    sensoryPreferences?: {
       videoCalls: boolean;
       backgroundNoise: boolean;
       breakFrequency: number;
