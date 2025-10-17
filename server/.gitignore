@@ -1,0 +1,6 @@
+# Backend specific
+server/node_modules/
+server/dist/
+server/.env
+server/*.log
+server/coverage/
