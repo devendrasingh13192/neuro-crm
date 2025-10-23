@@ -80,15 +80,39 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-bottom: 8px;
   
-  .mat-chip {
+  .communication-chip {
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    border: 2px solid #e0e0e0;
+    background-color: #f5f5f5;
     
     &:hover {
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-color: #3f51b5;
+    }
+    
+    
+    &.selected-channel {
+      background-color: #3f51b5 !important;
+      color: white !important;
+      border-color: #3f51b5;
+      
+      &:hover {
+        background-color: #303f9f !important;
+        border-color: #303f9f;
+      }
     }
   }
+}
+
+.chips-hint {
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 8px 0 0 0;
 }
 
 .toggle-row {

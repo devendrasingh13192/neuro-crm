@@ -27,7 +27,6 @@ export class ProfileService {
 
     updateProfile(profileData: UpdateProfileRequest): Observable<UserProfile> {
         this.isLoading.set(true);
-        console.log(profileData);
         return this.http.patch<UserProfile>('http://localhost:5000/api/v1/users/profile', profileData).pipe(
             tap((updatedProfile: UserProfile) => {
                 this.profileSignal.set(updatedProfile);

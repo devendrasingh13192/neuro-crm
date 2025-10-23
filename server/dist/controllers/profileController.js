@@ -23,7 +23,7 @@ export class ProfileController {
     }
     static async updateProfile(req, res) {
         try {
-            console.log('abc', req.userId, req.body);
+            //console.log('abc', req.userId, req.body);
             const profileData = req.body;
             const user = await User.findById(req.userId);
             if (!user) {
@@ -35,6 +35,7 @@ export class ProfileController {
             // Update other fields
             if (profileData.name)
                 user.name = profileData.name;
+            console.log(typeof profileData.communicationStyle.preferredChannels);
             if (profileData.communicationStyle) {
                 user.communicationStyle = {
                     ...user.communicationStyle,
@@ -52,10 +53,10 @@ export class ProfileController {
                 createdAt: user.createdAt,
                 updatedAt: user.updatedAt
             };
-            console.log(updatedProfile);
             return res.status(200).json(updatedProfile);
         }
         catch (error) {
+            console.log(error);
             return res.status(500).json({ message: 'Error updating profile' });
         }
     }

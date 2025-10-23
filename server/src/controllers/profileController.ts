@@ -32,7 +32,7 @@ export class ProfileController {
 
     static async updateProfile(req: AuthRequest, res: Response): Promise<Response> {
         try {
-            console.log('abc', req.userId, req.body);
+            //console.log('abc', req.userId, req.body);
             const profileData: UpdateProfileRequest = req.body;
             const user = await User.findById(req.userId);
             if (!user) {
@@ -48,6 +48,8 @@ export class ProfileController {
 
             
 
+            console.log(typeof profileData.communicationStyle.preferredChannels);
+
             if (profileData.communicationStyle) {
                 user.communicationStyle = {
                     ...user.communicationStyle,
@@ -56,8 +58,7 @@ export class ProfileController {
             }
            
 
-            const savedUser = await user.save();
-            console.log('saved user', savedUser);
+            await user.save();
             
             const updatedProfile: UserProfile = {
                 id: user._id!.toString(),
@@ -68,7 +69,6 @@ export class ProfileController {
                 createdAt: user.createdAt,
                 updatedAt: user.updatedAt
             }
-            console.log(updatedProfile);
             return res.status(200).json(updatedProfile);
         } catch (error: any) {
             return res.status(500).json({ message: 'Error updating profile' });

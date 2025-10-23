@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProfileService } from '../../services/profile.service';
@@ -14,6 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatChipsModule } from '@angular/material/chips';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -40,10 +41,12 @@ import { MatChipsModule } from '@angular/material/chips';
 export class ProfileComponent {
   private snackBar = inject(MatSnackBar);
   profileService = inject(ProfileService);
+  authService = inject(AuthService);
   breakFrequencyValue = signal(45);
 
   profileForm!: FormGroup;
   isSaving = signal(false);
+  isAdmin = computed(() => this.authService.user$()?.role === 'admin');
 
   communicationChannels = [
     { value: 'email', label: '📧 Email' },
@@ -66,16 +69,21 @@ export class ProfileComponent {
   private initForm(): void {
     this.profileForm = new FormGroup({
       name: new FormControl('', Validators.required),
-      role: new FormControl('sales', Validators.required),
-      primary: new FormControl('direct', Validators.required),
+      role: new FormControl('', Validators.required),
+      primary: new FormControl('', Validators.required),
       preferredChannels: new FormArray([], Validators.required),
-      startTime: new FormControl('09:00', Validators.required),
-      endTime: new FormControl('17:00', Validators.required),
-      timeZone : new FormControl('UTC',Validators.required),
-      videoCalls: new FormControl(true),
+      startTime: new FormControl('', Validators.required),
+      endTime: new FormControl('', Validators.required),
+      timeZone : new FormControl('',Validators.required),
+      videoCalls: new FormControl(false),
       backgroundNoise: new FormControl(false),
       breakFrequency: new FormControl(45, [Validators.required, Validators.min(15), Validators.max(120)])
     });
+    if(!this.isAdmin()){
+      this.profileForm.get('role')?.disable();
+    }else{
+      this.profileForm.get('role')?.enable();
+    }
   }
 
 
