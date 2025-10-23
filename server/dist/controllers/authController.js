@@ -11,7 +11,7 @@ export class AuthController {
             }
             const newUser = new User({ email, password });
             await newUser.save();
-            const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ userId: newUser._id.toString() }, JWT_SECRET, { expiresIn: '1h' });
             const response = {
                 token,
                 user: {
@@ -37,7 +37,7 @@ export class AuthController {
             if (!isPasswordValid) {
                 return res.status(400).json({ message: 'Invalid email or password' });
             }
-            const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ userId: user._id.toString() }, JWT_SECRET, { expiresIn: '1h' });
             const response = {
                 token,
                 user: {

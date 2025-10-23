@@ -23,16 +23,19 @@ const userSchema = new Schema<IUser>({
     },
     communicationStyle: {
         primary: { type: String, enum: ['direct', 'diplomatic', 'detailed', 'big_picture'], default: 'direct' },
-        preferredChannels: { type: String, enum: ['email', 'phone', 'text', 'video', 'in-person'] },
+        preferredChannels: [{
+            type: String,
+            enum: ['email', 'phone', 'text', 'video', 'in-person']
+        }],
         workingHours: {
             start: { type: String, default: '09:00' },
             end: { type: String, default: '17:00' },
             timezone: { type: String, default: 'UTC' }
         },
         sensoryPreferences: {
-            videoCalls: { type: Boolean, default: true },
+            videoCalls: { type: Boolean, default: false },
             backgroundNoise: { type: Boolean, default: false },
-            breakFrequency: { type: Number, default: 60 }
+            breakFrequency: { type: Number, default: 45 }
         }
     }
 }, {
