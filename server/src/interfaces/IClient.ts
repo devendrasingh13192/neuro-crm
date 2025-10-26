@@ -41,8 +41,43 @@ export interface IClient extends Document{
     relationshipScore : number;
     lastInteraction : Date;
     status : 'active' | 'prospect' | 'inactive';
+    notes? : string;
     createdAt?: Date;
     updatedAt?: Date;
+}
+
+export interface CreateClientRequest{
+    name : string;
+    company? : string;
+    email? : string;
+    phone? : string;
+    neuroProfile : Partial<INeuroProfile>;
+}
+
+export interface UpdateClientRequest {
+  name?: string;
+  company?: string;
+  email?: string;
+  phone?: string;
+  neuroProfile?: Partial<INeuroProfile>;
+  relationshipScore?: number;
+  status?: 'active' | 'prospect' | 'inactive';
+  notes?: string;
+}
+
+export interface ClientResponse {
+  id: string;
+  name: string;
+  company?: string;
+  email?: string;
+  phone?: string;
+  assignedTo: string;
+  neuroProfile: INeuroProfile;
+  relationshipScore: number;
+  lastInteraction?: Date;
+  status: 'active' | 'prospect' | 'inactive';
+  notes?: string;
+  createdAt?: Date;
 }
 
 

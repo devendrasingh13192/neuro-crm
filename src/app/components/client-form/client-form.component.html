@@ -1,0 +1,243 @@
+<div class="client-form-container">
+    <div class="header-section">
+        <h1>{{ isEditMode() ? 'Edit Client' : 'Add New Client' }}</h1>
+        <p>{{ isEditMode() ? 'Update client information and neuro profile' : 'Create a new neurodiverse client profile'
+            }}</p>
+    </div>
+
+    <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="client-form">
+        <mat-tab-group>
+            <!-- Basic Information Tab -->
+            <mat-tab label="Basic Information">
+                <div class="tab-content">
+                    <mat-card class="form-card">
+                        <mat-card-header>
+                            <mat-card-title>Client Details</mat-card-title>
+                            <mat-card-subtitle>Basic contact information</mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="form-row">
+                                <mat-form-field appearance="outline" class="full-width">
+                                    <mat-label>Full Name *</mat-label>
+                                    <input matInput formControlName="name" placeholder="Enter client's full name">
+                                    @if (clientForm.get('name')?.hasError('required')) {
+                                    <mat-error>Name is required</mat-error>
+                                    }
+                                </mat-form-field>
+                            </div>
+
+                            <div class="form-row">
+                                <mat-form-field appearance="outline" class="full-width">
+                                    <mat-label>Company</mat-label>
+                                    <input matInput formControlName="company" placeholder="Company name">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="form-row">
+                                <mat-form-field appearance="outline" class="half-width">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput type="email" formControlName="email"
+                                        placeholder="client@company.com">
+                                    @if (clientForm.get('email')?.hasError('email')) {
+                                    <mat-error>Please enter a valid email</mat-error>
+                                    }
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="half-width">
+                                    <mat-label>Phone</mat-label>
+                                    <input matInput formControlName="phone" placeholder="Phone number">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="form-row">
+                                <mat-form-field appearance="outline" class="half-width">
+                                    <mat-label>Status</mat-label>
+                                    <mat-select formControlName="status">
+                                        <mat-option value="prospect">Prospect</mat-option>
+                                        <mat-option value="active">Active</mat-option>
+                                        <mat-option value="inactive">Inactive</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="half-width">
+                                    <mat-label>Relationship Score</mat-label>
+                                    <input matInput type="number" formControlName="relationshipScore" min="0" max="100">
+                                    <span matTextSuffix>%</span>
+                                    @if (clientForm.get('relationshipScore')?.hasError('min')) {
+                                    <mat-error>Score must be at least 0</mat-error>
+                                    }
+                                    @if (clientForm.get('relationshipScore')?.hasError('max')) {
+                                    <mat-error>Score cannot exceed 100</mat-error>
+                                    }
+                                </mat-form-field>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </mat-tab>
+
+            <!-- Neuro Profile Tab -->
+            <mat-tab label="Neuro Profile">
+                <div class="tab-content">
+                    <mat-card class="form-card">
+                        <mat-card-header>
+                            <mat-card-title>Communication Style</mat-card-title>
+                            <mat-card-subtitle>Understanding client's neurodiversity</mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="form-row">
+                                <mat-form-field appearance="outline" class="full-width">
+                                    <mat-label>Primary Neurotype</mat-label>
+                                    <mat-select formControlName="primary">
+                                        <mat-option value="autistic">🧩 Autistic</mat-option>
+                                        <mat-option value="adhd">⚡ ADHD</mat-option>
+                                        <mat-option value="typical">💼 Typical</mat-option>
+                                        <mat-option value="mixed">🌈 Mixed</mat-option>
+                                        <mat-option value="unknown">❓ Unknown</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="form-row">
+                                <mat-form-field appearance="outline" class="half-width">
+                                    <mat-label>Detail Level Preference</mat-label>
+                                    <mat-select formControlName="detailLevel">
+                                        <mat-option value="high">High Detail</mat-option>
+                                        <mat-option value="medium">Medium Detail</mat-option>
+                                        <mat-option value="low">Low Detail</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="half-width">
+                                    <mat-label>Typical Response Time</mat-label>
+                                    <mat-select formControlName="responseTime">
+                                        <mat-option value="immediate">Immediate</mat-option>
+                                        <mat-option value="hours">Within Hours</mat-option>
+                                        <mat-option value="days">Within Days</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <!-- Meeting Preferences -->
+                    <mat-card class="form-card">
+                        <mat-card-header>
+                            <mat-card-title>Meeting Preferences</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="form-row">
+                                <mat-form-field appearance="outline" class="half-width">
+                                    <mat-label>Preferred Meeting Duration</mat-label>
+                                    <input matInput type="number" formControlName="meetingDuration" min="15" max="120">
+                                    <span matTextSuffix>minutes</span>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="half-width">
+                                    <mat-label>Break Frequency</mat-label>
+                                    <input matInput type="number" formControlName="breakFrequency" min="15" max="120">
+                                    <span matTextSuffix>minutes</span>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="toggle-section">
+                                <mat-slide-toggle formControlName="agendaRequired" color="primary">
+                                    Agenda Required
+                                </mat-slide-toggle>
+
+                                <mat-slide-toggle formControlName="cameraOn" color="primary">
+                                    Prefer Camera On
+                                </mat-slide-toggle>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <!-- Contact Methods -->
+                    <mat-card class="form-card">
+                        <mat-card-header>
+                            <mat-card-title>Preferred Contact Methods</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="chips-section">
+                                <h4>Select preferred methods:</h4>
+                                <div class="chips-container">
+                                    @for (method of contactMethods; track method.value) {
+                                    <mat-chip [class.selected]="isMethodSelected(method.value)"
+                                        (click)="toggleContactMethod(method.value)" class="contact-chip">
+                                        {{ method.label }}
+                                    </mat-chip>
+                                    }
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <!-- Stress & Strengths -->
+                    <mat-card class="form-card">
+                        <mat-card-header>
+                            <mat-card-title>Stress & Strengths</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="form-row">
+                                <mat-form-field appearance="outline" class="full-width">
+                                    <mat-label>Stress Triggers</mat-label>
+                                    <textarea matInput formControlName="stressTriggers"
+                                        placeholder="List stress triggers (comma separated)" rows="3"></textarea>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="form-row">
+                                <mat-form-field appearance="outline" class="full-width">
+                                    <mat-label>Strengths</mat-label>
+                                    <textarea matInput formControlName="strengths"
+                                        placeholder="List strengths (comma separated)" rows="3"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </mat-tab>
+
+            <!-- Notes Tab -->
+            <mat-tab label="Additional Notes">
+                <div class="tab-content">
+                    <mat-card class="form-card">
+                        <mat-card-header>
+                            <mat-card-title>Additional Information</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Notes</mat-label>
+                                <textarea matInput formControlName="notes"
+                                    placeholder="Additional notes about the client..." rows="6"></textarea>
+                            </mat-form-field>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button mat-stroked-button type="button" (click)="onCancel()">
+                Cancel
+            </button>
+
+            <div class="right-buttons">
+                <button mat-stroked-button type="button" (click)="resetForm()" [disabled]="!clientForm.dirty">
+                    Reset
+                </button>
+
+                <button mat-raised-button color="primary" type="submit"
+                    [disabled]="!clientForm.valid || clientService.isLoading()">
+                    @if (clientService.isLoading()) {
+                    <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+                    {{ isEditMode() ? 'Updating...' : 'Creating...' }}
+                    } @else {
+                    {{ isEditMode() ? 'Update Client' : 'Create Client' }}
+                    }
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

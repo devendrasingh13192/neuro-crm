@@ -1,0 +1,293 @@
+<div class="client-detail-container">
+      <!-- Loading State -->
+      @if (isLoading()) {
+        <div class="loading-spinner">
+          <mat-spinner diameter="50"></mat-spinner>
+        </div>
+      }
+
+      @if (client(); as clientData) {
+        <!-- Header Section -->
+        <div class="header-section">
+          <div class="client-header">
+            <div class="client-avatar-large">
+              {{ getInitials(clientData.name) }}
+            </div>
+            <div class="client-info">
+              <h1>{{ clientData.name }}</h1>
+              <div class="client-meta">
+                <span class="company">{{ clientData.company || 'No company' }}</span>
+                <mat-chip class="status-chip" [class]="getStatusClass(clientData.status)">
+                  {{ clientData.status }}
+                </mat-chip>
+                <mat-chip class="score-chip">
+                  💝 {{ clientData.relationshipScore }}% Relationship Score
+                </mat-chip>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button mat-stroked-button [routerLink]="['/clients']">
+              <mat-icon>arrow_back</mat-icon>
+              Back to Clients
+            </button>
+            
+            <button mat-icon-button [matMenuTriggerFor]="actionMenu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #actionMenu="matMenu">
+              <button mat-menu-item [routerLink]="['/clients', clientData.id, 'edit']">
+                <mat-icon>edit</mat-icon>
+                <span>Edit Client</span>
+              </button>
+              <button mat-menu-item (click)="deleteClient(clientData.id)" class="delete-btn">
+                <mat-icon>delete</mat-icon>
+                <span>Delete Client</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+
+        <mat-tab-group>
+          <!-- Overview Tab -->
+          <mat-tab label="Overview">
+            <div class="tab-content">
+              <div class="cards-grid">
+                <!-- Contact Information -->
+                <mat-card class="info-card">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <mat-icon>contact_mail</mat-icon>
+                      Contact Information
+                    </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div class="contact-info">
+                      @if (clientData.email) {
+                        <div class="contact-item">
+                          <mat-icon>email</mat-icon>
+                          <div>
+                            <strong>Email</strong>
+                            <p>{{ clientData.email }}</p>
+                          </div>
+                        </div>
+                      }
+                      @if (clientData.phone) {
+                        <div class="contact-item">
+                          <mat-icon>phone</mat-icon>
+                          <div>
+                            <strong>Phone</strong>
+                            <p>{{ clientData.phone }}</p>
+                          </div>
+                        </div>
+                      }
+                      <div class="contact-item">
+                        <mat-icon>calendar_today</mat-icon>
+                        <div>
+                          <strong>Client Since</strong>
+                          <p>{{ clientData.createdAt | date:'longDate' }}</p>
+                        </div>
+                      </div>
+                      @if (clientData.lastInteraction) {
+                        <div class="contact-item">
+                          <mat-icon>update</mat-icon>
+                          <div>
+                            <strong>Last Interaction</strong>
+                            <p>{{ clientData.lastInteraction | date:'longDate' }}</p>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+
+                <!-- Neuro Profile Summary -->
+                <mat-card class="info-card">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <mat-icon>psychology</mat-icon>
+                      Neuro Profile
+                    </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div class="neuro-summary">
+                      <div class="neuro-badge">
+                        <span class="neuro-icon">{{ getNeuroTypeIcon(clientData.neuroProfile.communicationStyle.primary) }}</span>
+                        <div>
+                          <strong>{{ clientData.neuroProfile.communicationStyle.primary | titlecase }}</strong>
+                          <p>Primary Neurotype</p>
+                        </div>
+                      </div>
+                      
+                      <div class="neuro-stats">
+                        <div class="neuro-stat">
+                          <span class="stat-label">Detail Level</span>
+                          <mat-chip class="detail-chip" [class]="getDetailLevelClass(clientData.neuroProfile.communicationStyle.detailLevel)">
+                            {{ clientData.neuroProfile.communicationStyle.detailLevel }}
+                          </mat-chip>
+                        </div>
+                        
+                        <div class="neuro-stat">
+                          <span class="stat-label">Response Time</span>
+                          <mat-chip class="response-chip">
+                            {{ clientData.neuroProfile.communicationStyle.responseTime }}
+                          </mat-chip>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+
+                <!-- Communication Preferences -->
+                <mat-card class="info-card">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <mat-icon>forum</mat-icon>
+                      Communication Preferences
+                    </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div class="preferences-section">
+                      <h4>Preferred Contact Methods</h4>
+                      <div class="chips-container">
+                        @for (method of clientData.neuroProfile.preferences.contactMethods; track method.method) {
+                          <mat-chip class="method-chip">
+                            {{ getContactMethodIcon(method.method) }}
+                            {{ getContactMethodLabel(method.method) }}
+                            <span class="effectiveness">({{ method.effectiveness }}/10)</span>
+                          </mat-chip>
+                        }
+                      </div>
+
+                      <mat-divider class="divider"></mat-divider>
+
+                      <h4>Meeting Preferences</h4>
+                      <div class="meeting-preferences">
+                        <div class="preference-item">
+                          <mat-icon>schedule</mat-icon>
+                          <span>Duration: {{ clientData.neuroProfile.preferences.meetingPreferences.duration }} minutes</span>
+                        </div>
+                        <div class="preference-item">
+                          <mat-icon>free_breakfast</mat-icon>
+                          <span>Breaks every: {{ clientData.neuroProfile.preferences.meetingPreferences.breakFrequency }} minutes</span>
+                        </div>
+                        <div class="preference-item">
+                          <mat-icon>description</mat-icon>
+                          <span>Agenda required: {{ clientData.neuroProfile.preferences.meetingPreferences.agendaRequired ? 'Yes' : 'No' }}</span>
+                        </div>
+                        <div class="preference-item">
+                          <mat-icon>videocam</mat-icon>
+                          <span>Camera preference: {{ clientData.neuroProfile.preferences.meetingPreferences.cameraOn ? 'On' : 'Off' }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+
+                <!-- Strengths & Stress Triggers -->
+                <mat-card class="info-card">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <mat-icon>insights</mat-icon>
+                      Strengths & Considerations
+                    </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div class="strengths-section">
+                      <h4>Strengths</h4>
+                      @if (clientData.neuroProfile.strengths.length > 0) {
+                        <div class="items-list">
+                          @for (strength of clientData.neuroProfile.strengths; track strength) {
+                            <mat-chip class="strength-chip">
+                              <mat-icon>star</mat-icon>
+                              {{ strength }}
+                            </mat-chip>
+                          }
+                        </div>
+                      } @else {
+                        <p class="no-data">No strengths recorded</p>
+                      }
+
+                      <mat-divider class="divider"></mat-divider>
+
+                      <h4>Stress Triggers</h4>
+                      @if (clientData.neuroProfile.stressTriggers.length > 0) {
+                        <div class="items-list">
+                          @for (trigger of clientData.neuroProfile.stressTriggers; track trigger) {
+                            <mat-chip class="trigger-chip">
+                              <mat-icon>warning</mat-icon>
+                              {{ trigger }}
+                            </mat-chip>
+                          }
+                        </div>
+                      } @else {
+                        <p class="no-data">No stress triggers recorded</p>
+                      }
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Notes Tab -->
+          <mat-tab label="Notes">
+            <div class="tab-content">
+              <mat-card class="notes-card">
+                <mat-card-header>
+                  <mat-card-title>Client Notes</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  @if (clientData.notes) {
+                    <div class="notes-content">
+                      {{ clientData.notes }}
+                    </div>
+                  } @else {
+                    <div class="no-notes">
+                      <mat-icon>notes</mat-icon>
+                      <p>No notes available for this client</p>
+                      <button mat-stroked-button [routerLink]="['/clients', clientData.id, 'edit']">
+                        <mat-icon>edit</mat-icon>
+                        Add Notes
+                      </button>
+                    </div>
+                  }
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </mat-tab>
+
+          <!-- Communication Tips Tab -->
+          <mat-tab label="Communication Tips">
+            <div class="tab-content">
+              <mat-card class="tips-card">
+                <mat-card-header>
+                  <mat-card-title>Recommended Communication Strategies</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="tips-list">
+                    @for (tip of getCommunicationTips(clientData); track tip) {
+                      <div class="tip-item">
+                        <mat-icon>lightbulb</mat-icon>
+                        <span>{{ tip }}</span>
+                      </div>
+                    }
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      } @else if (!isLoading()) {
+        <!-- Error State -->
+        <div class="error-state">
+          <mat-icon>error_outline</mat-icon>
+          <h3>Client Not Found</h3>
+          <p>The client you're looking for doesn't exist or you don't have access.</p>
+          <button mat-raised-button color="primary" routerLink="/clients">
+            Back to Clients
+          </button>
+        </div>
+      }
+    </div>

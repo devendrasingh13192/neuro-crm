@@ -1,0 +1,118 @@
+<div class="client-list-container">
+      <div class="header-section">
+        <div class="header-content">
+          <h1>Clients</h1>
+          <p>Manage your neurodiverse client relationships</p>
+        </div>
+        <button mat-raised-button color="primary" routerLink="/clients/new">
+          <!-- <mat-icon>person_add</mat-icon> -->
+          Add New Client
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      @if (clientService.isLoading() && !clientService.clients()) {
+        <div class="loading-spinner">
+          <mat-spinner diameter="50"></mat-spinner>
+        </div>
+      }
+
+      <!-- Clients Grid -->
+      <div class="clients-grid">
+        @for (client of clientService.clients(); track client.id) {
+          <mat-card class="client-card" [class]="getStatusClass(client.status)">
+            <mat-card-header>
+              <div class="client-header">
+                <div class="client-avatar">
+                  {{ getInitials(client.name) }}
+                </div>
+                <div class="client-info">
+                  <mat-card-title>{{ client.name }}</mat-card-title>
+                  <mat-card-subtitle>
+                    {{ client.company || 'No company' }}
+                  </mat-card-subtitle>
+                </div>
+              </div>
+              
+              <button mat-icon-button [matMenuTriggerFor]="clientMenu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #clientMenu="matMenu">
+                <button mat-menu-item [routerLink]="['/clients', client.id]">
+                  <mat-icon>visibility</mat-icon>
+                  <span>View Details</span>
+                </button>
+                <button mat-menu-item [routerLink]="['/clients', client.id, 'edit']">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit</span>
+                </button>
+                <button mat-menu-item (click)="deleteClient(client.id)" class="delete-btn">
+                  <mat-icon>delete</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+            </mat-card-header>
+
+            <mat-card-content>
+              <div class="client-details">
+                <div class="contact-info">
+                  @if (client.email) {
+                    <div class="contact-item">
+                      <mat-icon>email</mat-icon>
+                      <span>{{ client.email }}</span>
+                    </div>
+                  }
+                  @if (client.phone) {
+                    <div class="contact-item">
+                      <mat-icon>phone</mat-icon>
+                      <span>{{ client.phone }}</span>
+                    </div>
+                  }
+                </div>
+
+                <div class="neuro-info">
+                  <mat-chip-set>
+                    <mat-chip 
+                      [class]="getNeuroTypeClass(client.neuroProfile.communicationStyle.primary)"
+                      class="neuro-chip">
+                      {{ getNeuroTypeIcon(client.neuroProfile.communicationStyle.primary) }}
+                      {{ client.neuroProfile.communicationStyle.primary | titlecase }}
+                    </mat-chip>
+                    <mat-chip class="score-chip">
+                      💝 {{ client.relationshipScore }}%
+                    </mat-chip>
+                  </mat-chip-set>
+                </div>
+
+                <div class="client-stats">
+                  <div class="stat">
+                    <span class="stat-label">Detail Level</span>
+                    <span class="stat-value">{{ client.neuroProfile.communicationStyle.detailLevel }}</span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label">Response Time</span>
+                    <span class="stat-value">{{ client.neuroProfile.communicationStyle.responseTime }}</span>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+
+            <mat-card-actions>
+              <button mat-button [routerLink]="['/clients', client.id]" class="view-btn">
+                View Details
+              </button>
+              <span class="status-badge">{{ client.status }}</span>
+            </mat-card-actions>
+          </mat-card>
+        } @empty {
+          <div class="empty-state">
+            <!-- <mat-icon>people</mat-icon> -->
+            <h3>No clients yet</h3>
+            <p>Get started by adding your first neurodiverse client</p>
+            <button mat-raised-button color="primary" routerLink="/clients/new">
+              Add Your First Client
+            </button>
+          </div>
+        }
+      </div>
+    </div>
