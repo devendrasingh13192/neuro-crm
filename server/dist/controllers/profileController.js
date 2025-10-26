@@ -42,8 +42,7 @@ export class ProfileController {
                     ...profileData.communicationStyle
                 };
             }
-            const savedUser = await user.save();
-            console.log('saved user', savedUser);
+            await user.save();
             const updatedProfile = {
                 id: user._id.toString(),
                 name: user.name,
@@ -56,7 +55,6 @@ export class ProfileController {
             return res.status(200).json(updatedProfile);
         }
         catch (error) {
-            console.log(error);
             return res.status(500).json({ message: 'Error updating profile' });
         }
     }

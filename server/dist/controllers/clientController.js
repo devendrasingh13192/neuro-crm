@@ -6,7 +6,21 @@ export class ClientController {
             const clients = await Client.find({ assignedTo: req.userId })
                 .populate('assignedTo', 'name email')
                 .sort({ createdAt: -1 });
-            return res.status(200).json(clients);
+            const response = clients.map(client => ({
+                id: client._id.toString(),
+                name: client.name,
+                company: client.company,
+                email: client.email,
+                phone: client.phone,
+                assignedTo: client.assignedTo.toString(),
+                neuroProfile: client.neuroProfile,
+                relationshipScore: client.relationshipScore,
+                lastInteraction: client.lastInteraction,
+                status: client.status,
+                notes: client.notes,
+                createdAt: client.createdAt
+            }));
+            return res.status(200).json(response);
         }
         catch (error) {
             return res.status(500).json({ message: 'Server error', error: error.message });
@@ -19,9 +33,24 @@ export class ClientController {
             if (!client) {
                 return res.status(404).json({ message: 'Client not found' });
             }
-            return res.status(200).json(client);
+            const response = {
+                id: client._id.toString(),
+                name: client.name,
+                company: client.company,
+                email: client.email,
+                phone: client.phone,
+                assignedTo: client.assignedTo.toString(),
+                neuroProfile: client.neuroProfile,
+                relationshipScore: client.relationshipScore,
+                lastInteraction: client.lastInteraction,
+                status: client.status,
+                notes: client.notes,
+                createdAt: client.createdAt
+            };
+            return res.status(200).json(response);
         }
         catch (error) {
+            console.log(error);
             return res.status(500).json({ message: 'Server error', error: error.message });
         }
     }
@@ -37,23 +66,25 @@ export class ClientController {
             return res.status(201).json(newClient);
         }
         catch (error) {
+            console.log(error);
             return res.status(500).json({ message: 'Server error', error: error.message });
         }
     }
     static async updateClient(req, res) {
         try {
             const { id } = req.params;
-            const profileData = req.body;
-            const client = await Client.findOne({ _id: id, assignedTo: req.userId });
+            const clientData = req.body;
+            const client = await Client.findOneAndUpdate({ _id: req.params.id, assignedTo: req.userId }, { $set: clientData }, { new: true, runValidators: true });
             if (!client) {
                 return res.status(404).json({ message: 'Client not found' });
             }
-            client.neuroProfile = { ...client.neuroProfile, ...profileData };
+            client.neuroProfile = { ...client.neuroProfile, ...clientData };
             await client.save();
             await client.populate('assignedTo', 'name email');
             return res.status(200).json(client);
         }
         catch (error) {
+            console.log(error);
             return res.status(500).json({ message: 'Server error', error: error.message });
         }
     }
@@ -69,6 +100,22 @@ export class ClientController {
         }
         catch (error) {
             return res.status(500).json({ message: 'Server error', error: error.message });
+        }
+    }
+    static async deleteClient(req, res) {
+        try {
+            const client = await Client.findOneAndDelete({
+                _id: req.params.id,
+                assignedTo: req.userId
+            });
+            if (!client) {
+                return res.status(404).json({ message: 'Client not found' });
+            }
+            return res.json({ message: 'Client deleted successfully' });
+        }
+        catch (error) {
+            console.error('Delete client error:', error);
+            return res.status(500).json({ message: 'Error deleting client' });
         }
     }
     static generateRecommendations(neuroProfile) {

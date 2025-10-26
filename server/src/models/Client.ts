@@ -32,13 +32,15 @@ const clientSchema = new Schema<IClient>({
     },
     relationshipScore : { type : Number,min : 0, max : 100, default : 50 }, 
     lastInteraction : Date,
-    status : { type : String, enum : ['active', 'prospect', 'inactive'], default : 'prospect' }
+    status : { type : String, enum : ['active', 'prospect', 'inactive'], default : 'prospect' },
+    notes : String
 }, {
     timestamps: true
 });
 
 clientSchema.index({assignedTo: 1, status: 1});
 clientSchema.index({'neuroProfile.communicationStyle.primary': 1});
+clientSchema.index({ relationshipScore: -1 });
 
 export const Client = model<IClient>('Client', clientSchema);
 

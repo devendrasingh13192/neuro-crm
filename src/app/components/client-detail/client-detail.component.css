@@ -1,0 +1,442 @@
+.client-detail-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+}
+
+/* Header Section */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.client-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+}
+
+.client-avatar-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.client-info {
+  h1 {
+    margin: 0 0 12px 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #333;
+  }
+}
+
+.client-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  .company {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 500;
+  }
+}
+
+/* Status Chips */
+.status-chip {
+  font-weight: 500;
+  text-transform: capitalize;
+
+  &.status-active {
+    background: #e8f5e8;
+    color: #2e7d32;
+  }
+
+  &.status-prospect {
+    background: #fff3e0;
+    color: #ef6c00;
+  }
+
+  &.status-inactive {
+    background: #ffebee;
+    color: #c62828;
+  }
+}
+
+.score-chip {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+  color: white;
+  font-weight: 600;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Tab Content */
+.tab-content {
+  padding: 24px 0;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.info-card {
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  .mat-card-header {
+    margin-bottom: 16px;
+
+    .mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+
+      mat-icon {
+        color: #3f51b5;
+      }
+    }
+  }
+}
+
+/* Contact Information */
+.contact-info {
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f5f5;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    mat-icon {
+      color: #666;
+      margin-top: 2px;
+    }
+
+    strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #333;
+    }
+
+    p {
+      margin: 0;
+      color: #666;
+    }
+  }
+}
+
+/* Neuro Profile */
+.neuro-summary {
+  .neuro-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 16px;
+
+    .neuro-icon {
+      font-size: 2rem;
+    }
+
+    strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1.1rem;
+    }
+
+    p {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.neuro-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  .neuro-stat {
+    .stat-label {
+      display: block;
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+  }
+}
+
+/* Detail Level Chips */
+.detail-chip {
+  font-weight: 500;
+
+  &.detail-high {
+    background: #ff6b6b;
+    color: white;
+  }
+
+  &.detail-medium {
+    background: #4ecdc4;
+    color: white;
+  }
+
+  &.detail-low {
+    background: #45b7d1;
+    color: white;
+  }
+}
+
+.response-chip {
+  background: #96ceb4;
+  color: white;
+  font-weight: 500;
+}
+
+/* Communication Preferences */
+.preferences-section {
+  h4 {
+    margin: 0 0 12px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.method-chip {
+  font-weight: 500;
+
+  .effectiveness {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-left: 4px;
+  }
+}
+
+.divider {
+  margin: 20px 0;
+}
+
+.meeting-preferences {
+  .preference-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    color: #666;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #3f51b5;
+    }
+  }
+}
+
+/* Strengths & Stress Triggers */
+.strengths-section {
+  h4 {
+    margin: 0 0 12px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.items-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.strength-chip {
+  background: #e8f5e8;
+  color: #2e7d32;
+
+  mat-icon {
+    color: #4caf50;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.trigger-chip {
+  background: #ffebee;
+  color: #c62828;
+
+  mat-icon {
+    color: #f44336;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.no-data {
+  color: #999;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Notes Section */
+.notes-card, .tips-card {
+  border-radius: 12px;
+}
+
+.notes-content {
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.no-notes {
+  text-align: center;
+  padding: 40px 20px;
+
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+
+  p {
+    margin: 0 0 20px 0;
+    color: #666;
+  }
+}
+
+/* Communication Tips */
+.tips-list {
+  .tip-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f5f5;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    mat-icon {
+      color: #ffc107;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    span {
+      line-height: 1.5;
+      color: #333;
+    }
+  }
+}
+
+/* Error State */
+.error-state {
+  text-align: center;
+  padding: 60px 20px;
+
+  mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    color: #f44336;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    margin: 0 0 8px 0;
+    color: #333;
+  }
+
+  p {
+    margin: 0 0 24px 0;
+    color: #666;
+  }
+}
+
+.delete-btn {
+  color: #f44336;
+
+  mat-icon {
+    color: #f44336;
+  }
+}
