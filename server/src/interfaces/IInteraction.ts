@@ -16,3 +16,29 @@ export interface IInteraction extends Document{
     createdAt?: Date;
     updatedAt?: Date;
 }
+
+export interface IInteractionCreate {
+  client: ObjectId;
+  user: ObjectId;
+  type: 'email' | 'phone' | 'video' | 'in-person' | 'text';
+  summary: string;
+  duration: number;
+  sentiment: number;
+  effectiveness: number;
+  clientEngagement: number;
+  followUpRequired: boolean;
+  preferredAspects: string[];
+  improvementAreas: string[];
+}
+
+export interface IInteractionUpdate {
+  type?: 'email' | 'phone' | 'video' | 'in-person' | 'text';
+  summary?: string;
+  duration?: number;
+  sentiment?: number;
+  effectiveness?: number;
+  clientEngagement?: number;
+  followUpRequired?: boolean;
+  preferredAspects?: string[];
+  improvementAreas?: string[];
+}

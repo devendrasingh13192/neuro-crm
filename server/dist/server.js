@@ -6,6 +6,7 @@ import { authRouter } from './routes/auth.js';
 import { clientRouter } from './routes/clients.js';
 import { dashboardRouter } from './routes/dashboard.js';
 import { profileRouter } from './routes/profile.js';
+import { interactionRouter } from './routes/interaction.js';
 dotenv.config();
 const app = express();
 // Middleware
@@ -21,6 +22,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/clients', clientRouter);
 app.use('/api/v1/dashboard', dashboardRouter);
 app.use('/api/v1/users', profileRouter);
+app.use('/api/v1/interactions', interactionRouter);
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', message: 'NeuroCRM API is running', timestamp: new Date().toISOString() });

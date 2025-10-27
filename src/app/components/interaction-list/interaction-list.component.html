@@ -1,0 +1,82 @@
+<div class="container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                <!-- <mat-icon>history</mat-icon> -->
+                Interactions
+            </mat-card-title>
+            <button mat-raised-button color="primary" [routerLink]="['/interactions', 'new']"
+                [queryParams]="{clientId: clientId}">
+                <!-- <mat-icon>add</mat-icon> -->
+                Add Interaction
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+            @if (interactionService.isLoading()) {
+            <div class="loading">Loading...</div>
+            }
+
+            @if (interactionService.interactions().length > 0) {
+            <table mat-table [dataSource]="interactionService.interactions()">
+
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef>Type</th>
+                    <td mat-cell *matCellDef="let interaction" class="type-cell">
+                        <!-- <mat-icon>{{ getInteractionIcon(interaction.type) }}</mat-icon> -->
+                        {{ interaction.type }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="duration">
+                    <th mat-header-cell *matHeaderCellDef>Duration</th>
+                    <td mat-cell *matCellDef="let interaction">
+                        {{ interaction.duration }}m
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="summary">
+                    <th mat-header-cell *matHeaderCellDef>Summary</th>
+                    <td mat-cell *matCellDef="let interaction" class="summary-cell">
+                        {{ interaction.summary }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="sentiment">
+                    <th mat-header-cell *matHeaderCellDef>Sentiment</th>
+                    <td mat-cell *matCellDef="let interaction" class="sentiment-cell">
+                        <!-- <mat-icon [color]="getSentimentColor(interaction.sentiment)">
+                {{ getSentimentIcon(interaction.sentiment) }}
+              </mat-icon> -->
+                        {{ interaction.sentiment | number:'1.2-2' }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let interaction" class="actions-cell">
+                        <button mat-icon-button color="primary"
+                            [routerLink]="['/interactions', interaction.id, 'edit']">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="deleteInteraction(interaction.id!)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            } @else {
+            <div class="empty-state">
+                <p>No interactions found</p>
+                <button mat-raised-button color="primary" [routerLink]="['/interactions', 'new']"
+                    [queryParams]="{clientId: clientId}">
+                    Add First Interaction
+                </button>
+            </div>
+            }
+        </mat-card-content>
+    </mat-card>
+</div>
