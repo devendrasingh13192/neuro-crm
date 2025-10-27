@@ -290,4 +290,21 @@
           </button>
         </div>
       }
+
+      <!-- Add this in your client actions section -->
+<div class="client-actions">
+  <!-- Your existing buttons -->
+  
+  <!-- Add Interaction Button -->
+  <button mat-raised-button color="accent" [routerLink]="['/interactions', 'new']" [queryParams]="{clientId: clientId}">
+    <mat-icon>add</mat-icon>
+    Add Interaction
+  </button>
+
+  <!-- View Interactions Button -->
+  <button mat-stroked-button [routerLink]="['/clients', clientId, 'interactions']">
+    <mat-icon>history</mat-icon>
+    View Interactions
+  </button>
+</div>
     </div>

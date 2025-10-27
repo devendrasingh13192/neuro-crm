@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, ɵnormalizeQueryParams } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -215,7 +215,7 @@ export class ClientFormComponent {
         this.clientService.createClient(clientData as CreateClientRequest).subscribe({
           next: (newClient) => {
             this.snackbar.open('Client created successfully!', 'Close', { duration: 3000 });
-            this.router.navigate(['/clients', newClient.id]);
+            this.router.navigate(['/clients', {ɵnormalizeQueryParams : newClient.id}]);
           },
           error: (error) => {
             this.clientService.isLoading.set(false);

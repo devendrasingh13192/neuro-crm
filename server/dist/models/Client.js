@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 const clientSchema = new Schema({
     name: { type: String, required: true, trim: true, unique: true },
     company: String,
@@ -7,11 +7,16 @@ const clientSchema = new Schema({
     assignedTo: { type: Schema.Types.ObjectId, ref: 'User' },
     neuroProfile: {
         communicationStyle: {
+            type: Map, of: mongoose.Schema.Types.Mixed,
+            default: () => ({}),
             primary: { type: String, enum: ['autistic', 'adhd', 'typical', 'mixed', 'unknown'], default: 'unknown' },
             detailLevel: { type: String, enum: ['high', 'medium', 'low'], default: 'medium' },
             responseTime: { type: String, enum: ['immediate', 'hours', 'days'], default: 'hours' }
         },
         preferences: {
+            type: Map,
+            of: mongoose.Schema.Types.Mixed,
+            default: () => ({}),
             contactMethods: [{
                     method: { type: String, enum: ['email', 'phone', 'text', 'video', 'in-person'], required: true },
                     effectiveness: { type: Number, min: 1, max: 10, default: 5 }

@@ -42,15 +42,15 @@ export class ClientDetailComponent {
 
   client = signal< Client| null>(null);
   isLoading = signal(true);
+  clientId = this.route.snapshot.paramMap.get('id');
 
   ngOnInit() : void{
     this.loadClient();
   }
 
   private loadClient() : void {
-    const clientId = this.route.snapshot.paramMap.get('id');
-    if(clientId){
-      this.clientService.getClientById(clientId).subscribe({
+    if(this.clientId){
+      this.clientService.getClientById(this.clientId).subscribe({
         next : (client) => {
           this.client.set(client);
           this.isLoading.set(false);

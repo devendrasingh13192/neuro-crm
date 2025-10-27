@@ -13,18 +13,23 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-  path: 'clients/new',
-  loadComponent: () => import('./components/client-form/client-form.component').then(m => m.ClientFormComponent),
-  canActivate: [authGuard]
-},
-{
-  path: 'clients/:id',
-  loadComponent: () => import('./components/client-detail/client-detail.component').then(m => m.ClientDetailComponent),
-  canActivate: [authGuard]
-},
-{
-  path: 'clients/:id/edit',
-  loadComponent: () => import('./components/client-form/client-form.component').then(m => m.ClientFormComponent),
-  canActivate: [authGuard]
-}
+    path: 'clients/new',
+    loadComponent: () => import('./components/client-form/client-form.component').then(m => m.ClientFormComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'clients/:id',
+    loadComponent: () => import('./components/client-detail/client-detail.component').then(m => m.ClientDetailComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'clients/:id/edit',
+    loadComponent: () => import('./components/client-form/client-form.component').then(m => m.ClientFormComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'clients/:clientId/interactions',
+    loadComponent: () => import('./components/interaction-list/interaction-list.component')
+      .then(c => c.InteractionListComponent)
+  }
 ];
