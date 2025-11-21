@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { InteractionService } from '../../services/interaction.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-interaction-list',
@@ -39,6 +40,7 @@ export class InteractionListComponent {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
+  private destroy$ = new Subject<void>();
 
   displayedColumns: string[] = ['type', 'summary', 'duration', 'sentiment', 'actions'];
 
@@ -51,7 +53,7 @@ export class InteractionListComponent {
 
   loadInteractions(): void {
     if (this.clientId) {
-      this.interactionService.getInteractionsByClient(this.clientId).subscribe({
+      this.interactionService.getInteractionsByClient(this.clientId).pipe(takeUntil(this.destroy$)).subscribe({
         error: () => {
           this.snackBar.open('Failed to load clients', 'Close', { duration: 3000 });
         }
@@ -101,5 +103,10 @@ export class InteractionListComponent {
         }
       });
     }
+  }
+
+  ngOnDestroy(){
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

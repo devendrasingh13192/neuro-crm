@@ -1,63 +1,321 @@
+/* interaction-list.component.css */
 .container {
-  padding: 1rem;
+  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+/* Card Styling */
+mat-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  overflow: hidden;
 }
 
 mat-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 20px 24px 0 !important;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
-.loading {
-  text-align: center;
-  padding: 2rem;
-}
-
-.type-cell {
+mat-card-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: #2c3e50;
+  margin: 0 !important;
+}
+
+mat-card-content {
+  padding: 0 24px 24px !important;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Table Styling - FIXED ALIGNMENT */
+table {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  table-layout: fixed; /* Prevents column width issues */
+}
+
+th.mat-header-cell {
+  background: #f8f9fa !important;
+  color: #2c3e50 !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem;
+  padding: 16px 12px !important;
+  border-bottom: 2px solid #e9ecef;
+  vertical-align: middle; /* Fixes vertical alignment */
+}
+
+td.mat-cell {
+  padding: 16px 12px !important;
+  border-bottom: 1px solid #e9ecef;
+  color: #495057;
+  font-size: 0.9rem;
+  vertical-align: middle; /* Fixes vertical alignment */
+}
+
+/* Fixed Column Widths for Proper Alignment */
+th.mat-header-cell:nth-child(1), /* Type */
+td.mat-cell:nth-child(1) {
+  width: 15%;
+  text-align: left;
+}
+
+th.mat-header-cell:nth-child(2), /* Summary */
+td.mat-cell:nth-child(2) {
+  width: 40%;
+  text-align: left;
+}
+
+th.mat-header-cell:nth-child(3), /* Duration */
+td.mat-cell:nth-child(3) {
+  width: 15%;
+  text-align: center;
+}
+
+th.mat-header-cell:nth-child(4), /* Sentiment */
+td.mat-cell:nth-child(4) {
+  width: 15%;
+  text-align: center;
+}
+
+th.mat-header-cell:nth-child(5), /* Actions */
+td.mat-cell:nth-child(5) {
+  width: 15%;
+  text-align: center;
+}
+
+tr.mat-row:hover {
+  background-color: #f8f9fa !important;
+  transition: background-color 0.2s ease;
+}
+
+/* Column Specific Styling */
+.type-cell {
+  text-transform: capitalize;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.type-cell mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 .summary-cell {
-  max-width: 400px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
 }
 
+/* FIXED Sentiment Cell Alignment */
 .sentiment-cell {
+  font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
 }
 
+.sentiment-cell mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Sentiment Colors */
+.sentiment-positive {
+  color: #27ae60;
+}
+
+.sentiment-neutral {
+  color: #f39c12;
+}
+
+.sentiment-negative {
+  color: #e74c3c;
+}
+
+/* FIXED Actions Cell Alignment */
 .actions-cell {
   display: flex;
-  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px !important;
 }
 
+.actions-cell button {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.actions-cell mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Duration Cell Alignment */
+td.mat-cell:nth-child(3) {
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Empty State */
 .empty-state {
   text-align: center;
-  padding: 3rem;
+  padding: 60px 20px;
+  color: #6c757d;
 }
 
-/* Mobile responsive */
+.empty-state p {
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+.empty-state button {
+  margin-top: 10px;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .container {
-    padding: 0.5rem;
+    padding: 15px;
   }
   
   mat-card-header {
     flex-direction: column;
-    gap: 1rem;
+    gap: 15px;
     align-items: stretch;
   }
   
-  .summary-cell {
-    max-width: 200px;
+  mat-card-title {
+    justify-content: center;
   }
+  
+  /* Make table scrollable on mobile */
+  .mat-table {
+    overflow-x: auto;
+    display: block;
+  }
+  
+  table {
+    table-layout: auto; /* Allow natural widths on mobile */
+    min-width: 600px;
+  }
+  
+  th.mat-header-cell,
+  td.mat-cell {
+    padding: 12px 8px !important;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  
+  /* Adjust column widths for mobile */
+  th.mat-header-cell:nth-child(1),
+  td.mat-cell:nth-child(1) {
+    width: 20%;
+  }
+  
+  th.mat-header-cell:nth-child(2),
+  td.mat-cell:nth-child(2) {
+    width: 35%;
+  }
+  
+  th.mat-header-cell:nth-child(3),
+  td.mat-cell:nth-child(3) {
+    width: 15%;
+  }
+  
+  th.mat-header-cell:nth-child(4),
+  td.mat-cell:nth-child(4) {
+    width: 15%;
+  }
+  
+  th.mat-header-cell:nth-child(5),
+  td.mat-cell:nth-child(5) {
+    width: 15%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+  
+  mat-card-header {
+    padding: 15px 16px 0 !important;
+  }
+  
+  mat-card-content {
+    padding: 0 16px 16px !important;
+  }
+  
+  .actions-cell {
+    gap: 4px;
+  }
+  
+  .actions-cell button {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .empty-state {
+    padding: 40px 15px;
+  }
+  
+  .summary-cell {
+    max-width: 120px;
+  }
+}
+
+/* Animation for smooth transitions */
+mat-row, mat-header-row {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Ensure proper text alignment in all cells */
+.mat-cell, .mat-header-cell {
+  text-align: left;
+}
+
+/* Specific alignment fixes */
+.mat-column-duration,
+.mat-column-sentiment,
+.mat-column-actions {
+  text-align: center !important;
+}
+
+.mat-column-type,
+.mat-column-summary {
+  text-align: left !important;
 }

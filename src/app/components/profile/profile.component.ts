@@ -15,6 +15,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatChipsModule } from '@angular/material/chips';
 import { AuthService } from '../../services/auth.service';
+import { Subject, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -43,6 +44,8 @@ export class ProfileComponent {
   profileService = inject(ProfileService);
   authService = inject(AuthService);
   breakFrequencyValue = signal(45);
+  private destroy$ = new Subject<void>();
+  
 
   profileForm!: FormGroup;
   isSaving = signal(false);
@@ -88,7 +91,7 @@ export class ProfileComponent {
 
 
   private loadProfile(): void {
-    this.profileService.getProfile().subscribe({
+    this.profileService.getProfile().pipe(takeUntil(this.destroy$)).subscribe({
       next: (profile) => {
         this.populateForm(profile);
       },
@@ -189,6 +192,11 @@ export class ProfileComponent {
 
   get preferredChannelsArray(): FormArray {
     return this.profileForm.get('preferredChannels') as FormArray;
+  }
+
+  ngOnDestroy(){
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }
