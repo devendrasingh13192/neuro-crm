@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,16 +20,22 @@ import { MatChipsModule } from '@angular/material/chips';
 export class DashboardComponent {
   dashboardService = inject(DashboardService);
   authService = inject(AuthService);
+  private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
      this.loadDashboardData();
   }
 
   loadDashboardData(): void {
-    this.dashboardService.getDashboardData().subscribe({
+    this.dashboardService.getDashboardData().pipe(takeUntil(this.destroy$)).subscribe({
       error: (error) => {
         console.error('Failed to load dashboard:', error);
       }
     });
+  }
+
+  ngOnDestroy(){
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

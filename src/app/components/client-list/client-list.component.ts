@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
 import { ClientService } from '../../services/client.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-client-list',
@@ -27,6 +28,7 @@ export class ClientListComponent {
    private snackBar = inject(MatSnackBar);
   private router = inject(Router);
   clientService = inject(ClientService);
+  private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
     this.loadClients();
@@ -34,7 +36,7 @@ export class ClientListComponent {
 
 
   loadClients(): void {
-    this.clientService.getClients().subscribe({
+    this.clientService.getClients().pipe(takeUntil(this.destroy$)).subscribe({
       error: (error) => {
         this.snackBar.open('Failed to load clients', 'Close', { duration: 3000 });
       }
@@ -75,6 +77,11 @@ export class ClientListComponent {
 
   getStatusClass(status: string): string {
     return `status-${status}`;
+  }
+
+  ngOnDestroy(){
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
 
