@@ -12,6 +12,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ClientService } from '../../services/client.service';
 import { Client } from '../../interfaces/client';
+import { AppIfDirective } from '../../directives/app-if.directive';
 
 @Component({
   selector: 'app-client-detail',
@@ -27,8 +28,8 @@ import { Client } from '../../interfaces/client';
     MatDividerModule,
     MatSnackBarModule,
     MatMenuModule,
-    MatTabsModule
-
+    MatTabsModule,
+    AppIfDirective
   ],
   templateUrl: './client-detail.component.html',
   styleUrl: './client-detail.component.css'
